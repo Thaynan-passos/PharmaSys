@@ -22,6 +22,7 @@ public class TelaCadastroFornecedor extends JFrame {
 
     public TelaCadastroFornecedor() {
         initComponents();
+        this.setLocationRelativeTo(null);
         configurarBotoes();
     }
 
@@ -178,7 +179,9 @@ public class TelaCadastroFornecedor extends JFrame {
 
             dao.create(fornecedor);
 
-            mensagem.enviarConfirmacaoFornecedor(fornecedor.getEmail(), fornecedor.getNome());
+            java.util.concurrent.CompletableFuture.runAsync(() -> {
+                mensagem.enviarConfirmacaoFornecedor(fornecedor.getEmail(), fornecedor.getNome());
+            });
 
             JOptionPane.showMessageDialog(this, "Fornecedor cadastrado com sucesso!");
             limparCampos();

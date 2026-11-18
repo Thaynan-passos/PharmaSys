@@ -78,7 +78,7 @@ public class ZNovaTelaFuncionario extends javax.swing.JFrame {
             logoPharmasys.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pharmasys_logo.png")));
         } catch (Exception e) {}
 
-        botaoSair.setFont(new java.awt.Font("SF Pro", 0, 15));
+        botaoSair.setFont(new java.awt.Font("Segoe UI", 0, 15));
         botaoSair.setForeground(new java.awt.Color(153, 0, 0));
         botaoSair.setText("Sair >");
         botaoSair.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -94,15 +94,15 @@ public class ZNovaTelaFuncionario extends javax.swing.JFrame {
         labelNome.setFont(new java.awt.Font("Segoe UI", 0, 13));
 
         jPanel2.setBackground(new java.awt.Color(208, 226, 231));
-        jLabel3.setFont(new java.awt.Font("SF Pro", 3, 14));
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 3, 14));
         jLabel3.setForeground(new java.awt.Color(102, 102, 102));
         jLabel3.setText("Buscar por medicamento:");
 
-        buttonRealizarVenda.setFont(new java.awt.Font("SF Pro", 3, 16));
+        buttonRealizarVenda.setFont(new java.awt.Font("Segoe UI", 3, 16));
         buttonRealizarVenda.setText("Realizar venda");
         buttonRealizarVenda.addActionListener(evt -> buttonRealizarVendaActionPerformed(evt));
 
-        buttonVisualizarEstoque.setFont(new java.awt.Font("SF Pro", 3, 16));
+        buttonVisualizarEstoque.setFont(new java.awt.Font("Segoe UI", 3, 16));
         buttonVisualizarEstoque.setText("Visualizar Estoque");
         buttonVisualizarEstoque.addActionListener(evt -> buttonVisualizarEstoqueActionPerformed(evt));
 
@@ -114,10 +114,10 @@ public class ZNovaTelaFuncionario extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("SF Pro", 1, 18));
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18));
         jLabel2.setText("Olá, farmacêutico!");
 
-        jButton1.setFont(new java.awt.Font("SF Pro", 3, 16));
+        jButton1.setFont(new java.awt.Font("Segoe UI", 3, 16));
         jButton1.setText("Buscar por Scanner");
         jButton1.addActionListener(evt -> jButton1ActionPerformed(evt));
 

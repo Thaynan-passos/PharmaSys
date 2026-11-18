@@ -35,6 +35,7 @@ public class TelaScanner extends javax.swing.JFrame implements Runnable, ThreadF
     private ScannerListener listener;
     private Webcam webcam = null;
     private WebcamPanel panel = null;
+    private volatile boolean running = true;
     private Executor executor = Executors.newSingleThreadExecutor(this);
     private MedicamentoDAO medicamentoDAO = new MedicamentoDAO(); // DAO para buscar o nome
 
@@ -211,16 +212,20 @@ public class TelaScanner extends javax.swing.JFrame implements Runnable, ThreadF
                     }
                 });
             }
-        } while (true);
+        } while (running);
     }
     
-    // Método novo para preencher o nome
-    private void buscarNomeProduto(String sku) {
+    // Método para preencher o nome buscando por SKU ou Código de Barras
+    private void buscarNomeProduto(String codigoOuSku) {
         new Thread(() -> {
-            Medicamento med = medicamentoDAO.buscarPorSku(sku);
+            Medicamento med = medicamentoDAO.buscarPorSku(codigoOuSku);
+            if (med == null) {
+                med = medicamentoDAO.buscarPorCodigoBarras(codigoOuSku);
+            }
+            final Medicamento finalMed = med;
             SwingUtilities.invokeLater(() -> {
-                if (med != null) {
-                    txtNomeProduto.setText(med.getNomeComercial());
+                if (finalMed != null) {
+                    txtNomeProduto.setText(finalMed.getNomeComercial());
                     txtNomeProduto.setForeground(new Color(0, 100, 0)); // Verde se achar
                 } else {
                     txtNomeProduto.setText("PRODUTO NÃO CADASTRADO");
@@ -239,6 +244,7 @@ public class TelaScanner extends javax.swing.JFrame implements Runnable, ThreadF
     
     @Override
     public void dispose() {
+        running = false;
         if (webcam != null && webcam.isOpen()) {
             webcam.close();
         }

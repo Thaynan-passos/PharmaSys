@@ -65,16 +65,16 @@ public class NovaTelaGerencia extends javax.swing.JFrame {
         TabbedPanePrincipal.setBackground(new java.awt.Color(255, 255, 245));
         AbaMedicamentos.setBackground(new java.awt.Color(219, 238, 245));
 
-        ButtonCadastrarMedicamento.setFont(new java.awt.Font("SF Pro", 0, 14));
+        ButtonCadastrarMedicamento.setFont(new java.awt.Font("Segoe UI", 0, 14));
         ButtonCadastrarMedicamento.setText("Cadastrar Medicamento");
         ButtonCadastrarMedicamento.addActionListener(evt -> ButtonCadastrarMedicamentoActionPerformed(evt));
 
-        ButtonVIsualizarEstoque.setFont(new java.awt.Font("SF Pro", 0, 14));
+        ButtonVIsualizarEstoque.setFont(new java.awt.Font("Segoe UI", 0, 14));
         ButtonVIsualizarEstoque.setText("Visualizar Estoque");
         ButtonVIsualizarEstoque.addActionListener(evt -> ButtonVIsualizarEstoqueActionPerformed(evt));
 
         // CONFIGURAÇÃO DO NOVO BOTÃO
-        ButtonCadastrarLote.setFont(new java.awt.Font("SF Pro", 0, 14));
+        ButtonCadastrarLote.setFont(new java.awt.Font("Segoe UI", 0, 14));
         ButtonCadastrarLote.setText("Cadastrar Lote");
         ButtonCadastrarLote.addActionListener(evt -> ButtonCadastrarLoteActionPerformed(evt));
 
@@ -108,7 +108,7 @@ public class NovaTelaGerencia extends javax.swing.JFrame {
         // --- (Código das outras abas mantido igual) ---
         
         AbaFuncionarios.setBackground(new java.awt.Color(219, 238, 245));
-        ButtonCadastrarFuncionario.setFont(new java.awt.Font("SF Pro", 0, 14));
+        ButtonCadastrarFuncionario.setFont(new java.awt.Font("Segoe UI", 0, 14));
         ButtonCadastrarFuncionario.setText("Cadastrar Funcionário");
         ButtonCadastrarFuncionario.addActionListener(evt -> ButtonCadastrarFuncionarioActionPerformed(evt));
 
@@ -125,7 +125,7 @@ public class NovaTelaGerencia extends javax.swing.JFrame {
         TabbedPanePrincipal.addTab("Funcionários", AbaFuncionarios);
 
         AbaFornecedor.setBackground(new java.awt.Color(219, 238, 245));
-        ButtonCadastrarFornecedor.setFont(new java.awt.Font("SF Pro", 0, 14));
+        ButtonCadastrarFornecedor.setFont(new java.awt.Font("Segoe UI", 0, 14));
         ButtonCadastrarFornecedor.setText("Cadastrar Fornecedor");
         ButtonCadastrarFornecedor.addActionListener(evt -> ButtonCadastrarFornecedorActionPerformed(evt));
 
@@ -142,7 +142,7 @@ public class NovaTelaGerencia extends javax.swing.JFrame {
         TabbedPanePrincipal.addTab("Fornecedor", AbaFornecedor);
 
         AbaRelatorios.setBackground(new java.awt.Color(219, 238, 245));
-        ButtonEmitirRelatorio.setFont(new java.awt.Font("SF Pro", 0, 14));
+        ButtonEmitirRelatorio.setFont(new java.awt.Font("Segoe UI", 0, 14));
         ButtonEmitirRelatorio.setText("Emitir Relatório");
         ButtonEmitirRelatorio.addActionListener(evt -> ButtonEmitirRelatorioActionPerformed(evt));
 
@@ -208,7 +208,7 @@ public class NovaTelaGerencia extends javax.swing.JFrame {
                         .addComponent(logoPharmasys))))
         );
 
-        jLabel4.setFont(new java.awt.Font("SF Pro", 1, 20)); 
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 20)); 
         jLabel4.setText("Olá, gerente!");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);

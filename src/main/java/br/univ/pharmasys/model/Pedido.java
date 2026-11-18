@@ -61,8 +61,11 @@ public class Pedido {
     }
 
     public BigDecimal getValorTotal() {
-
         return valor_total;
+    }
+
+    public void setValorTotal(BigDecimal valorTotal) {
+        this.valor_total = valorTotal;
     }
 
     private void calcularValorTotal() {

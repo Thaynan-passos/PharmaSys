@@ -20,30 +20,30 @@ public class MedicamentoComprimidoDAO extends MedicamentoDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, sku);
-            ResultSet rs = stmt.executeQuery();
 
-            if (rs.next()) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
 
-                MedicamentoComprimido comp = new MedicamentoComprimido();
-                comp.setSku(rs.getString("SKU"));
-                comp.setNomeComercial(rs.getString("NOME_COMERCIAL"));
-                comp.setDosagem(rs.getString("DOSAGEM"));
-                comp.setFormaFarmaceutica(rs.getString("FORMA_FARMACEUTICA"));
-                comp.setFabricante(rs.getString("FABRICANTE"));
-                comp.setCodigoBarras(rs.getString("CODIGO_BARRAS"));
-                comp.setLaboratorio(rs.getString("LABORATORIO"));
-                comp.setEstoqueMax(rs.getInt("ESTOQUE_MAX"));
-                comp.setEstoqueMin(rs.getInt("ESTOQUE_MIN"));
-                comp.setEstoqueAtual(rs.getInt("ESTOQUE_ATUAL"));
-                comp.setPreco(rs.getBigDecimal("PRECO"));
+                    MedicamentoComprimido comp = new MedicamentoComprimido();
+                    comp.setSku(rs.getString("SKU"));
+                    comp.setNomeComercial(rs.getString("NOME_COMERCIAL"));
+                    comp.setDosagem(rs.getString("DOSAGEM"));
+                    comp.setFormaFarmaceutica(rs.getString("FORMA_FARMACEUTICA"));
+                    comp.setFabricante(rs.getString("FABRICANTE"));
+                    comp.setCodigoBarras(rs.getString("CODIGO_BARRAS"));
+                    comp.setLaboratorio(rs.getString("LABORATORIO"));
+                    comp.setEstoqueMax(rs.getInt("ESTOQUE_MAX"));
+                    comp.setEstoqueMin(rs.getInt("ESTOQUE_MIN"));
+                    comp.setEstoqueAtual(rs.getInt("ESTOQUE_ATUAL"));
+                    comp.setPreco(rs.getBigDecimal("PRECO"));
 
+                    if (rs.getDate("DATA_EXPIRACAO") != null) {
+                        comp.setDataExpiracao(rs.getDate("DATA_EXPIRACAO").toLocalDate());
+                    }
+                    comp.setQuantidadeComprimidos(rs.getInt("QUANTIDADE_COMPRIMIDOS"));
 
-                if (rs.getDate("DATA_EXPIRACAO") != null) {
-                    comp.setDataExpiracao(rs.getDate("DATA_EXPIRACAO").toLocalDate());
+                    return comp;
                 }
-                comp.setQuantidadeComprimidos(rs.getInt("QUANTIDADE_COMPRIMIDOS"));
-
-                return comp;
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar medicamento comprimido: " + e.getMessage(), e);

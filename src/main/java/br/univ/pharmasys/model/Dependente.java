@@ -8,9 +8,12 @@ import java.time.LocalDate;
 public class Dependente {
 
     private long id;
+    private String cpf;
     private Funcionario funcionario; 
+    private Long funcionarioId;
     private String cpfFuncionario; 
     private String nome;
+    private String sexo;
     private String parentesco;
     private LocalDate dataNascimento;
 
@@ -33,11 +36,42 @@ public class Dependente {
 
         DependenteValidador.validarFuncionario(funcionario);
         this.funcionario = funcionario;
+        this.funcionarioId = funcionario.getIdFuncionario();
 
         //Ao setar o objeto já preenche o CPF automaticamente
 
         this.cpfFuncionario = funcionario.getCpf();
 
+    }
+
+    public Long getFuncionarioId() {
+        if (funcionarioId != null) return funcionarioId;
+        return funcionario != null ? funcionario.getIdFuncionario() : null;
+    }
+
+    public void setFuncionarioId(Long funcionarioId) {
+        this.funcionarioId = funcionarioId;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        if (cpf != null) {
+            ValidadorUtils.cpfValido(cpf);
+            this.cpf = cpf.replaceAll("\\D", "");
+        } else {
+            this.cpf = null;
+        }
+    }
+
+    public String getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
     }
 
     public String getCpfFuncionario() {

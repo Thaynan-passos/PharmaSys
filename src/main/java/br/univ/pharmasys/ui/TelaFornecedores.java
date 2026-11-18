@@ -1,13 +1,18 @@
 package br.univ.pharmasys.ui;
 
+import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
+import br.univ.pharmasys.dao.FornecedorDAO;
+import br.univ.pharmasys.model.Fornecedor;
 
 @SuppressWarnings("serial")
 public class TelaFornecedores extends JFrame {
 
     public TelaFornecedores() {
         initComponents();
+        carregarDados();
     }
 
     private void initComponents() {
@@ -23,7 +28,7 @@ public class TelaFornecedores extends JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Gerenciar Fornecedores");
 
-        jLabelTitulo.setFont(new java.awt.Font("SF Pro", 1, 20));
+        jLabelTitulo.setFont(new java.awt.Font("Segoe UI", 1, 20));
         jLabelTitulo.setText("Gerenciamento de Fornecedores");
 
         tabelaFornecedores.setModel(new DefaultTableModel(
@@ -81,12 +86,39 @@ public class TelaFornecedores extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    public void carregarDados() {
+        DefaultTableModel model = (DefaultTableModel) tabelaFornecedores.getModel();
+        model.setRowCount(0);
+
+        try {
+            FornecedorDAO dao = new FornecedorDAO();
+            List<Fornecedor> fornecedores = dao.listarTodos();
+            for (Fornecedor f : fornecedores) {
+                model.addRow(new Object[]{
+                    f.getIdFornecedor(),
+                    f.getNome(),
+                    f.getCnpj(),
+                    f.getEmail(),
+                    f.getTelefoneId()
+                });
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar fornecedores: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     private void abrirCadastro() {
-        new TelaCadastroFornecedor().setVisible(true);
+        TelaCadastroFornecedor tela = new TelaCadastroFornecedor();
+        tela.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                carregarDados();
+            }
+        });
+        tela.setVisible(true);
     }
     
     private void voltar() {
-        new TelaEstoquista().setVisible(true);
         this.dispose();
     }
 

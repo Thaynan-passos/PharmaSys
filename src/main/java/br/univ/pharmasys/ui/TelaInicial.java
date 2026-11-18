@@ -183,16 +183,11 @@ public class TelaInicial extends JFrame {
 	    }
 	
 	    
-	    /*try {
-	        for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-	            if ("Nimbus".equals(info.getName())) {
-	                UIManager.setLookAndFeel(info.getClassName());
-	                break;
-	            }
-	        }
-	    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-	        java.util.logging.Logger.getLogger(TelaInicial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-	    }*/
+	    try {
+	        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+	    } catch (Exception ignored) {
+	        // Mantem aparencia padrao em caso de falha
+	    }
 	    
 	    EventQueue.invokeLater(() -> {
 	        new TelaInicial().setVisible(true);

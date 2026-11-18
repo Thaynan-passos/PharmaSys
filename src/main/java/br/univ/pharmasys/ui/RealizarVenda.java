@@ -2,9 +2,14 @@ package br.univ.pharmasys.ui;
 
 import br.univ.pharmasys.dao.MedicamentoDAO;
 import br.univ.pharmasys.dao.NotaFiscalDAO;
+import br.univ.pharmasys.dao.PedidoDAO;
+import br.univ.pharmasys.dao.PedidoItemMedDAO;
+import br.univ.pharmasys.model.Funcionario;
 import br.univ.pharmasys.model.ItemNotaFiscal;
 import br.univ.pharmasys.model.Medicamento;
 import br.univ.pharmasys.model.NotaFiscal;
+import br.univ.pharmasys.model.Pedido;
+import br.univ.pharmasys.model.Status;
 import br.univ.pharmasys.util.ConnectionFactory;
 import br.univ.pharmasys.util.GeradorQrCode;
 
@@ -16,6 +21,7 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -91,9 +97,12 @@ public class RealizarVenda extends JFrame {
         scanner.setVisible(true);
     }
 
-    private void buscarEAdicionarProduto(String sku) {
+    private void buscarEAdicionarProduto(String skuOuCodigo) {
         MedicamentoDAO dao = new MedicamentoDAO();
-        Medicamento med = dao.buscarPorSku(sku);
+        Medicamento med = dao.buscarPorSku(skuOuCodigo);
+        if (med == null) {
+            med = dao.buscarPorCodigoBarras(skuOuCodigo);
+        }
 
         if (med != null) {
             String qtdStr = JOptionPane.showInputDialog(this, 
@@ -156,25 +165,48 @@ public class RealizarVenda extends JFrame {
         }
 
         try {
-            // 1. Criar a Nota Fiscal e vincular ID DO FUNCIONÁRIO
+            // 1. Criar o Pedido correspondente no banco
+            Pedido pedido = new Pedido();
+            int totalQtd = carrinho.stream().mapToInt(ItemNotaFiscal::getQuantidade).sum();
+            pedido.setQuantidade(totalQtd > 0 ? totalQtd : 1);
+            pedido.setStatus(Status.FINALIZADO);
+            pedido.setData(LocalDate.now());
+            pedido.setPrecoUnitario(totalVenda.divide(BigDecimal.valueOf(pedido.getquantidade()), 2, java.math.RoundingMode.HALF_UP));
+            pedido.setValorTotal(totalVenda);
+            
+            PedidoDAO pedidoDao = new PedidoDAO();
+            pedidoDao.create(pedido);
+
+            // 2. Criar a Nota Fiscal associada ao funcionário e ao pedido
             NotaFiscal nf = new NotaFiscal();
             nf.setNumeroNota("NF-" + System.currentTimeMillis());
             nf.setValorTotal(totalVenda);
-            nf.setCpfCliente("000.000.000-00");
+            nf.setCpfCliente("00000000000");
+            nf.setIdPedido(pedido.getIdPedido());
             
-            // Supondo que sua classe NotaFiscal tenha este método (adicione-o no modelo se não tiver)
-             nf.setId(idFuncionarioLogado); 
+            Funcionario func = new Funcionario();
+            func.setIdFuncionario(idFuncionarioLogado);
+            nf.setFuncionarioResponsavel(func);
 
-            // 2. Salvar Nota Fiscal (Gera ID)
+            // 3. Salvar Nota Fiscal (Gera ID)
             NotaFiscalDAO nfDao = new NotaFiscalDAO();
             Long idNota = nfDao.salvar(nf); 
             nf.setId(idNota);
 
-            // 3. Salvar Itens e Atualizar Estoque
+            // 4. Salvar Itens e Atualizar Estoque
             MedicamentoDAO medDao = new MedicamentoDAO();
+            PedidoItemMedDAO itemPedidoDao = new PedidoItemMedDAO();
             
             for (ItemNotaFiscal item : carrinho) {
                 salvarItemNoBanco(nf.getId(), item);
+                if (pedido.getIdPedido() > 0) {
+                    itemPedidoDao.inserirItemPedido(
+                        (int) pedido.getIdPedido(),
+                        item.getMedicamento().getSku(),
+                        item.getQuantidade(),
+                        item.getPrecoUnitario()
+                    );
+                }
 
                 Medicamento med = item.getMedicamento();
                 int novoEstoque = med.getEstoqueAtual() - item.getQuantidade();
@@ -281,15 +313,15 @@ public class RealizarVenda extends JFrame {
             labelLogo.setText("PharmaSys");
         }
 
-        labelNome.setFont(new Font("SF Pro", 0, 14)); 
+        labelNome.setFont(new Font("Segoe UI", 0, 14)); 
         labelNome.setText("Vendedor");
 
         labelSeparador.setFont(new Font("Segoe UI", 0, 14)); 
         labelSeparador.setText("|");
 
-        relogio.setFont(new Font("SF Pro", 0, 14)); 
+        relogio.setFont(new Font("Segoe UI", 0, 14)); 
 
-        labelTotal.setFont(new Font("SF Pro", 1, 16)); 
+        labelTotal.setFont(new Font("Segoe UI", 1, 16)); 
         labelTotal.setText("Total: R$ 0,00");
 
         // Configuração do Painel (Vai receber a tabela depois no método configurarTabela)
@@ -308,7 +340,7 @@ public class RealizarVenda extends JFrame {
         buttonFinalizarCompra.setForeground(Color.WHITE);
         buttonFinalizarCompra.setText("FINALIZAR COMPRA");
 
-        labelPagamento.setFont(new Font("SF Pro", 0, 15)); 
+        labelPagamento.setFont(new Font("Segoe UI", 0, 15)); 
         labelPagamento.setText("Método de pagamento:");
 
         rbPix.setText("Pix");

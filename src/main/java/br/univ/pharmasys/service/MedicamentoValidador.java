@@ -44,8 +44,8 @@ public class MedicamentoValidador {
             throw new NomeInvalidoException("O nome do medicamento não pode estar vazio.");
         }
 
-        if (!nome.matches("[\\p{L} ]+")) {
-            throw new NomeInvalidoException("O nome do medicamento não pode conter números ou símbolos.");
+        if (!nome.matches("[\\p{L}\\p{N} %/.,()\\-]+")) {
+            throw new NomeInvalidoException("O nome do medicamento contém caracteres inválidos.");
         }
     }
 

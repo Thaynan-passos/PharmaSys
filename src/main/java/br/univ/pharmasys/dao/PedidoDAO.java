@@ -22,7 +22,7 @@ public class PedidoDAO {
 				VALUES (?,?,?,?,?) """;
 		
 		 try (Connection conn = ConnectionFactory.getConnection();
-	             PreparedStatement stmt = conn.prepareStatement(sql)) {
+	             PreparedStatement stmt = conn.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS)) {
 			 stmt.setInt(1, pedido.getquantidade());
 	            stmt.setString(2, pedido.getStatus().name());
 
@@ -116,9 +116,11 @@ public List<Pedido> listarTodos() {
 
 	        Pedido pedido = new Pedido();
 
+	        pedido.setIdPedido(rs.getLong("ID_PEDIDO"));
 	        pedido.setQuantidade(rs.getInt("QUANTIDADE"));
 	        pedido.setStatus(Status.valueOf(rs.getString("STATUS")));
 	        pedido.setPrecoUnitario(rs.getBigDecimal("PRECO_UNITARIO"));
+	        pedido.setValorTotal(rs.getBigDecimal("VALOR_TOTAL"));
 
 	        Date dataSql = rs.getDate("DATA");
 	        if (dataSql != null) {

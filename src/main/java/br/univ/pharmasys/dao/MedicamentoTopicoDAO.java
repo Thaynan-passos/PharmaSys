@@ -20,33 +20,33 @@ public class MedicamentoTopicoDAO extends MedicamentoDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, sku);
-            ResultSet rs = stmt.executeQuery();
 
-            if (rs.next()) {
-                MedicamentoTopico top = new MedicamentoTopico();
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    MedicamentoTopico top = new MedicamentoTopico();
 
-                top.setSku(rs.getString("SKU"));
-                top.setNomeComercial(rs.getString("NOME_COMERCIAL"));
-                top.setDosagem(rs.getString("DOSAGEM"));
-                top.setFormaFarmaceutica(rs.getString("FORMA_FARMACEUTICA"));
-                top.setFabricante(rs.getString("FABRICANTE"));
-                top.setCodigoBarras(rs.getString("CODIGO_BARRAS"));
-                top.setLaboratorio(rs.getString("LABORATORIO"));
-                top.setEstoqueMax(rs.getInt("ESTOQUE_MAX"));
-                top.setEstoqueMin(rs.getInt("ESTOQUE_MIN"));
-                top.setEstoqueAtual(rs.getInt("ESTOQUE_ATUAL"));
-                top.setPreco(rs.getBigDecimal("PRECO"));
+                    top.setSku(rs.getString("SKU"));
+                    top.setNomeComercial(rs.getString("NOME_COMERCIAL"));
+                    top.setDosagem(rs.getString("DOSAGEM"));
+                    top.setFormaFarmaceutica(rs.getString("FORMA_FARMACEUTICA"));
+                    top.setFabricante(rs.getString("FABRICANTE"));
+                    top.setCodigoBarras(rs.getString("CODIGO_BARRAS"));
+                    top.setLaboratorio(rs.getString("LABORATORIO"));
+                    top.setEstoqueMax(rs.getInt("ESTOQUE_MAX"));
+                    top.setEstoqueMin(rs.getInt("ESTOQUE_MIN"));
+                    top.setEstoqueAtual(rs.getInt("ESTOQUE_ATUAL"));
+                    top.setPreco(rs.getBigDecimal("PRECO"));
 
+                    if (rs.getDate("DATA_EXPIRACAO") != null) {
+                        top.setDataExpiracao(rs.getDate("DATA_EXPIRACAO").toLocalDate());
+                    }
 
-                if (rs.getDate("DATA_EXPIRACAO") != null) {
-                    top.setDataExpiracao(rs.getDate("DATA_EXPIRACAO").toLocalDate());
+                    // Preenche dados Específicos (MedicamentoTopico)
+                    top.setPesoGramas(rs.getDouble("PESO_GRAMAS"));
+                    top.setTipoEmbalagem(rs.getString("TIPO_EMBALAGEM"));
+
+                    return top;
                 }
-
-                // Preenche dados Específicos (MedicamentoTopico)
-                top.setPesoGramas(rs.getDouble("PESO_GRAMAS"));
-                top.setTipoEmbalagem(rs.getString("TIPO_EMBALAGEM"));
-
-                return top;
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar medicamento tópico: " + e.getMessage(), e);

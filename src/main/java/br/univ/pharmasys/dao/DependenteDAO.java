@@ -9,28 +9,38 @@ import java.util.List;
 
 public class DependenteDAO {
 
-    private static final String INSERT_SQL = "INSERT INTO dependente (cpf_funcionario, nome, parentesco, data_nascimento) VALUES (?, ?, ?, ?)";
-    private static final String UPDATE_SQL = "UPDATE dependente SET cpf_funcionario = ?, nome = ?, parentesco = ?, data_nascimento = ? WHERE id = ?";
-    private static final String DELETE_SQL = "DELETE FROM dependente WHERE id = ?";
-    private static final String SELECT_ALL_SQL = "SELECT * FROM dependente";
-    private static final String SELECT_BY_ID_SQL = "SELECT * FROM dependente WHERE id = ?";
-    private static final String SELECT_BY_FUNC_CPF = "SELECT * FROM dependente WHERE cpf_funcionario = ?";
+    private static final String INSERT_SQL = "INSERT INTO DEPENDENTE (CPF, NOME, SEXO, DATA_NASCIMENTO, FUNCIONARIO_ID) VALUES (?, ?, ?, ?, ?)";
+    private static final String UPDATE_SQL = "UPDATE DEPENDENTE SET CPF = ?, NOME = ?, SEXO = ?, DATA_NASCIMENTO = ?, FUNCIONARIO_ID = ? WHERE ID_DEPENDENTE = ?";
+    private static final String DELETE_SQL = "DELETE FROM DEPENDENTE WHERE ID_DEPENDENTE = ?";
+    private static final String SELECT_ALL_SQL = "SELECT D.*, F.CPF AS CPF_TITULAR FROM DEPENDENTE D LEFT JOIN FUNCIONARIO F ON D.FUNCIONARIO_ID = F.ID_FUNCIONARIO ORDER BY D.NOME";
+    private static final String SELECT_BY_ID_SQL = "SELECT D.*, F.CPF AS CPF_TITULAR FROM DEPENDENTE D LEFT JOIN FUNCIONARIO F ON D.FUNCIONARIO_ID = F.ID_FUNCIONARIO WHERE D.ID_DEPENDENTE = ?";
+    private static final String SELECT_BY_FUNC_CPF = "SELECT D.*, F.CPF AS CPF_TITULAR FROM DEPENDENTE D INNER JOIN FUNCIONARIO F ON D.FUNCIONARIO_ID = F.ID_FUNCIONARIO WHERE F.CPF = ? ORDER BY D.NOME";
 
-    // 1 Salvar
+    // 1. Salvar
     public void salvar(Dependente dependente) {
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS)) {
 
-            stmt.setString(1, dependente.getCpfFuncionario());
+            stmt.setString(1, dependente.getCpf() != null ? dependente.getCpf() : dependente.getCpfFuncionario());
             stmt.setString(2, dependente.getNome());
-            stmt.setString(3, dependente.getParentesco());
+            stmt.setString(3, dependente.getSexo());
             
-            // Conversão de LocalDate para java.sql.Date
-            stmt.setDate(4, Date.valueOf(dependente.getDataNascimento()));
+            if (dependente.getDataNascimento() != null) {
+                stmt.setDate(4, Date.valueOf(dependente.getDataNascimento()));
+            } else {
+                stmt.setNull(4, Types.DATE);
+            }
+
+            if (dependente.getFuncionarioId() != null) {
+                stmt.setLong(5, dependente.getFuncionarioId());
+            } else if (dependente.getFuncionario() != null) {
+                stmt.setLong(5, dependente.getFuncionario().getIdFuncionario());
+            } else {
+                throw new SQLException("O Dependente deve ter um funcionário associado.");
+            }
 
             stmt.executeUpdate();
 
-            // Recupera o ID gerado pelo banco para atualizar o objeto
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     dependente.setId(generatedKeys.getLong(1));
@@ -42,16 +52,30 @@ public class DependenteDAO {
         }
     }
 
+    // 2. Atualizar
     public void atualizar(Dependente dependente) {
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(UPDATE_SQL)) {
 
-            stmt.setString(1, dependente.getCpfFuncionario());
+            stmt.setString(1, dependente.getCpf() != null ? dependente.getCpf() : dependente.getCpfFuncionario());
             stmt.setString(2, dependente.getNome());
-            stmt.setString(3, dependente.getParentesco());
-            stmt.setDate(4, Date.valueOf(dependente.getDataNascimento()));
-            stmt.setLong(5, dependente.getId());
+            stmt.setString(3, dependente.getSexo());
 
+            if (dependente.getDataNascimento() != null) {
+                stmt.setDate(4, Date.valueOf(dependente.getDataNascimento()));
+            } else {
+                stmt.setNull(4, Types.DATE);
+            }
+
+            if (dependente.getFuncionarioId() != null) {
+                stmt.setLong(5, dependente.getFuncionarioId());
+            } else if (dependente.getFuncionario() != null) {
+                stmt.setLong(5, dependente.getFuncionario().getIdFuncionario());
+            } else {
+                stmt.setNull(5, Types.BIGINT);
+            }
+
+            stmt.setLong(6, dependente.getId());
             stmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -59,6 +83,7 @@ public class DependenteDAO {
         }
     }
 
+    // 3. Deletar
     public void deletar(Long id) {
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(DELETE_SQL)) {
@@ -71,7 +96,7 @@ public class DependenteDAO {
         }
     }
 
-    // 4 Buscar por ID
+    // 4. Buscar por ID
     public Dependente buscarPorId(Long id) {
         Dependente dependente = null;
 
@@ -93,7 +118,7 @@ public class DependenteDAO {
         return dependente;
     }
 
-    // 5 Lista tudo
+    // 5. Listar tudo
     public List<Dependente> listarTodos() {
         List<Dependente> lista = new ArrayList<>();
 
@@ -112,7 +137,7 @@ public class DependenteDAO {
         return lista;
     }
 
-    // 6 listar por Funcionário
+    // 6. Listar por Funcionário
     public List<Dependente> listarPorCpfFuncionario(String cpfFuncionario) {
         List<Dependente> lista = new ArrayList<>();
 
@@ -137,16 +162,18 @@ public class DependenteDAO {
     private Dependente mapearResultSet(ResultSet rs) throws SQLException {
         Dependente d = new Dependente();
         
-        d.setId(rs.getLong("id"));
+        d.setId(rs.getLong("ID_DEPENDENTE"));
+        d.setCpf(rs.getString("CPF"));
+        d.setNome(rs.getString("NOME"));
+        d.setSexo(rs.getString("SEXO"));
+        d.setFuncionarioId(rs.getLong("FUNCIONARIO_ID"));
         
-        d.setCpfFuncionario(rs.getString("cpf_funcionario")); 
+        try {
+            d.setCpfFuncionario(rs.getString("CPF_TITULAR"));
+        } catch (SQLException ignored) {}
         
-        d.setNome(rs.getString("nome"));
-        d.setParentesco(rs.getString("parentesco"));
-        
-        // Conversão de java.sql.Date para LocalDate
-        if (rs.getDate("data_nascimento") != null) {
-            d.setDataNascimento(rs.getDate("data_nascimento").toLocalDate());
+        if (rs.getDate("DATA_NASCIMENTO") != null) {
+            d.setDataNascimento(rs.getDate("DATA_NASCIMENTO").toLocalDate());
         }
 
         return d;

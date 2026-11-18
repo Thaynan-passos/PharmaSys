@@ -14,9 +14,14 @@ import jakarta.mail.Transport;
 public class MensagemEmailFornecedor {
 
     public void enviarConfirmacaoFornecedor(String emailUsuario, String nomeUsuario) {
-        // Configurações do remetente
-        final String remetente = "ajudapharmasys@gmail.com";
-        final String senha = "aduutabbkyyrhbkj";
+        // Configurações do remetente obtidas via ConfigLoader
+        final String remetente = ConfigLoader.get("mail.smtp.user", "");
+        final String senha = ConfigLoader.get("mail.smtp.password", "");
+
+        if (remetente.isEmpty() || senha.isEmpty()) {
+            System.err.println("Aviso: Configurações de e-mail não encontradas em config.properties.");
+            return;
+        }
 
         // Propriedades do Servidor SMTP
         Properties props = new Properties();

@@ -1,0 +1,11 @@
+# Configurações do Banco de Dados MySQL
+db.url=jdbc:mysql://localhost:3306/pharmasys?useTimezone=true&serverTimezone=America/Recife
+db.user=root
+db.password=sua_senha_aqui
+
+# Configurações de E-mail SMTP (Gmail)
+mail.smtp.user=seu_email@gmail.com
+mail.smtp.password=sua_app_password
+
+# Configurações do Mercado Pago
+mercadopago.access_token=seu_access_token_aqui

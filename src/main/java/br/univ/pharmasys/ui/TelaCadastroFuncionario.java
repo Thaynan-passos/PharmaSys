@@ -18,6 +18,7 @@ public class TelaCadastroFuncionario extends JFrame {
 
     public TelaCadastroFuncionario() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     private void initComponents() {
@@ -46,8 +47,8 @@ public class TelaCadastroFuncionario extends JFrame {
         TextEmail = new JTextField();
         TextEmailConfirm = new JTextField();
         TextTelefone = new JTextField();
-        TextSenha = new JTextField();
-        TextSenhaConfirm = new JTextField();
+        TextSenha = new JPasswordField();
+        TextSenhaConfirm = new JPasswordField();
         boxCargo = new JComboBox<>();
         boxCargo.setModel(new DefaultComboBoxModel<>(
                 new String[] { "Estoquista", "Atendente", "Gerente" }
@@ -59,7 +60,7 @@ public class TelaCadastroFuncionario extends JFrame {
         setResizable(false);
 
         LabelTituloCadastroFunc.setBackground(new java.awt.Color(255, 255, 255));
-        LabelTituloCadastroFunc.setFont(new java.awt.Font("SF Pro", 1, 24)); // NOI18N
+        LabelTituloCadastroFunc.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         LabelTituloCadastroFunc.setHorizontalAlignment(SwingConstants.CENTER);
         LabelTituloCadastroFunc.setText("Cadastro de Funcionário");
 
@@ -78,31 +79,31 @@ public class TelaCadastroFuncionario extends JFrame {
         });
 
         //
-        jLabel1.setFont(new java.awt.Font("SF Pro", 0, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Nome completo:");
 
-        jLabel2.setFont(new java.awt.Font("SF Pro", 0, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Data de nascimento:");
 
-        jLabel3.setFont(new java.awt.Font("SF Pro", 0, 13)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         jLabel3.setText("Sexo:");
 
-        jLabel4.setFont(new java.awt.Font("SF Pro", 0, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setText("CPF:");
 
-        jLabel5.setFont(new java.awt.Font("SF Pro", 0, 14)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel5.setText("Cargo:");
 
-        jLabel6.setFont(new java.awt.Font("SF Pro", 0, 14)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel6.setText("Email:");
 
-        jLabel7.setFont(new java.awt.Font("SF Pro", 0, 14)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel7.setText("Confirmar email:");
 
-        jLabel8.setFont(new java.awt.Font("SF Pro", 0, 14)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel8.setText("Definir senha:");
 
-        jLabel9.setFont(new java.awt.Font("SF Pro", 0, 14)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel9.setText("Confirmar a senha:");
 
         boxDia.setModel(new DefaultComboBoxModel<>(new String[] { "  ", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", " " }));
@@ -122,7 +123,7 @@ public class TelaCadastroFuncionario extends JFrame {
 
         jLabel11.setText("Telefone 1:");
 
-        TextSenha.setFont(new java.awt.Font("SF Pro", 0, 12)); // NOI18N
+        TextSenha.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
 
         GroupLayout layout = new GroupLayout(getContentPane());
         layout.setHorizontalGroup(
@@ -252,8 +253,8 @@ public class TelaCadastroFuncionario extends JFrame {
     private void BotaoCadastrarAction(java.awt.event.ActionEvent evt) {
         try {
  
-            String senha1 = TextSenha.getText();
-            String senha2 = TextSenhaConfirm.getText();
+            String senha1 = new String(TextSenha.getPassword());
+            String senha2 = new String(TextSenhaConfirm.getPassword());
             
             // Verifica se as senhas são iguais
             if (!senha1.equals(senha2)) {
@@ -327,7 +328,9 @@ public class TelaCadastroFuncionario extends JFrame {
 
             dao.create(func);
 
-            mensagem.enviarConfirmacao(func.getEmail(), func.getNome());
+            java.util.concurrent.CompletableFuture.runAsync(() -> {
+                mensagem.enviarConfirmacao(func.getEmail(), func.getNome());
+            });
 
             JOptionPane.showMessageDialog(this, "Funcionário cadastrado com sucesso!");
            
@@ -408,6 +411,6 @@ public class TelaCadastroFuncionario extends JFrame {
     private JTextField TextEmail;
     private JTextField TextEmailConfirm;
     private JTextField TextTelefone;
-    private JTextField TextSenha;
-    private JTextField TextSenhaConfirm;
+    private JPasswordField TextSenha;
+    private JPasswordField TextSenhaConfirm;
 }

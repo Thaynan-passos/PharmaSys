@@ -221,17 +221,6 @@ public class TelaCadastroLote extends javax.swing.JPanel {
                 return;
             }
 
-            if (!validadeLote.equals(medicamento.getDataExpiracao())) {
-                JOptionPane.showMessageDialog(
-                        this,
-                        "A validade do lote deve ser igual à validade do medicamento:\n"
-                                + medicamento.getDataExpiracao(),
-                        "Validade incompatível",
-                        JOptionPane.ERROR_MESSAGE
-                );
-                return;
-            }
-
             br.univ.pharmasys.dao.LoteDAO dao = new br.univ.pharmasys.dao.LoteDAO();
             br.univ.pharmasys.model.Lote loteExistente =
                     dao.buscarPorSkuEValidade(

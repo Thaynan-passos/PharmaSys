@@ -20,29 +20,30 @@ public class MedicamentoLiquidoDAO extends MedicamentoDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, sku);
-            ResultSet rs = stmt.executeQuery();
 
-            if (rs.next()) {
-                MedicamentoLiquido liq = new MedicamentoLiquido();
-                liq.setSku(rs.getString("SKU"));
-                liq.setNomeComercial(rs.getString("NOME_COMERCIAL"));
-                liq.setDosagem(rs.getString("DOSAGEM"));
-                liq.setFormaFarmaceutica(rs.getString("FORMA_FARMACEUTICA"));
-                liq.setFabricante(rs.getString("FABRICANTE"));
-                liq.setCodigoBarras(rs.getString("CODIGO_BARRAS"));
-                liq.setLaboratorio(rs.getString("LABORATORIO"));
-                liq.setEstoqueMax(rs.getInt("ESTOQUE_MAX"));
-                liq.setEstoqueMin(rs.getInt("ESTOQUE_MIN"));
-                liq.setEstoqueAtual(rs.getInt("ESTOQUE_ATUAL"));
-                liq.setPreco(rs.getBigDecimal("PRECO"));
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    MedicamentoLiquido liq = new MedicamentoLiquido();
+                    liq.setSku(rs.getString("SKU"));
+                    liq.setNomeComercial(rs.getString("NOME_COMERCIAL"));
+                    liq.setDosagem(rs.getString("DOSAGEM"));
+                    liq.setFormaFarmaceutica(rs.getString("FORMA_FARMACEUTICA"));
+                    liq.setFabricante(rs.getString("FABRICANTE"));
+                    liq.setCodigoBarras(rs.getString("CODIGO_BARRAS"));
+                    liq.setLaboratorio(rs.getString("LABORATORIO"));
+                    liq.setEstoqueMax(rs.getInt("ESTOQUE_MAX"));
+                    liq.setEstoqueMin(rs.getInt("ESTOQUE_MIN"));
+                    liq.setEstoqueAtual(rs.getInt("ESTOQUE_ATUAL"));
+                    liq.setPreco(rs.getBigDecimal("PRECO"));
 
-                if (rs.getDate("DATA_EXPIRACAO") != null) {
-                    liq.setDataExpiracao(rs.getDate("DATA_EXPIRACAO").toLocalDate());
+                    if (rs.getDate("DATA_EXPIRACAO") != null) {
+                        liq.setDataExpiracao(rs.getDate("DATA_EXPIRACAO").toLocalDate());
+                    }
+                    liq.setVolumeMl(rs.getDouble("VOLUME_ML"));
+                    liq.setTipoRecipiente(rs.getString("TIPO_RECIPIENTE"));
+
+                    return liq;
                 }
-                liq.setVolumeMl(rs.getDouble("VOLUME_ML"));
-                liq.setTipoRecipiente(rs.getString("TIPO_RECIPIENTE"));
-
-                return liq;
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar medicamento líquido: " + e.getMessage(), e);

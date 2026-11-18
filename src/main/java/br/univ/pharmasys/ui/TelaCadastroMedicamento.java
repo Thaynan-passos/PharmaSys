@@ -28,6 +28,7 @@ public class TelaCadastroMedicamento extends JFrame {
 
     public TelaCadastroMedicamento() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     private void initComponents() {
@@ -38,7 +39,7 @@ public class TelaCadastroMedicamento extends JFrame {
         setResizable(false);
 
         JLabel labelTitulo = new JLabel("Cadastro de Medicamento");
-        labelTitulo.setFont(new Font("SF Pro", Font.BOLD, 26));
+        labelTitulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
         labelTitulo.setHorizontalAlignment(SwingConstants.CENTER);
 
         JLabel lblTipo = new JLabel("Tipo de Medicamento:");
@@ -467,9 +468,31 @@ public class TelaCadastroMedicamento extends JFrame {
                 MedicamentoComprimido m = new MedicamentoComprimido();
                 preencherDadosComuns(m);
                 m.setQuantidadeComprimidos(
-                        Integer.parseInt(txtQtdComp.getText())
+                        Integer.parseInt(txtQtdComp.getText().trim())
                 );
                 new MedicamentoComprimidoDAO().create(m);
+
+            } else if ("Líquido".equals(tipo)) {
+                MedicamentoLiquido m = new MedicamentoLiquido();
+                preencherDadosComuns(m);
+                m.setVolumeMl(Double.parseDouble(txtVolume.getText().trim().replace(",", ".")));
+                m.setTipoRecipiente(txtRecipiente.getText().trim());
+                new MedicamentoLiquidoDAO().create(m);
+
+            } else if ("Injetável".equals(tipo)) {
+                MedicamentoInjetavel m = new MedicamentoInjetavel();
+                preencherDadosComuns(m);
+                m.setViaAdministracao(txtVia.getText().trim());
+                m.setTemperaturaMinima(Double.parseDouble(txtTempMin.getText().trim().replace(",", ".")));
+                m.setTemperaturaMaxima(Double.parseDouble(txtTempMax.getText().trim().replace(",", ".")));
+                new MedicamentoInjetavelDAO().create(m);
+
+            } else if ("Tópico".equals(tipo)) {
+                MedicamentoTopico m = new MedicamentoTopico();
+                preencherDadosComuns(m);
+                m.setPesoGramas(Double.parseDouble(txtPeso.getText().trim().replace(",", ".")));
+                m.setTipoEmbalagem(txtEmbalagem.getText().trim());
+                new MedicamentoTopicoDAO().create(m);
 
             } else {
                 Medicamento m = new Medicamento();

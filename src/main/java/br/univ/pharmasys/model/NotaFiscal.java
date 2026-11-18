@@ -14,6 +14,7 @@ public class NotaFiscal {
     
     private Funcionario funcionarioResponsavel;
     private String cpfCliente;
+    private Long idPedido;
 
     private List<ItemNotaFiscal> itens; 
 
@@ -69,6 +70,14 @@ public class NotaFiscal {
 
     public void setCpfCliente(String cpfCliente) {
         this.cpfCliente = cpfCliente;
+    }
+
+    public Long getIdPedido() {
+        return idPedido;
+    }
+
+    public void setIdPedido(Long idPedido) {
+        this.idPedido = idPedido;
     }
 
     public List<ItemNotaFiscal> getItens() {

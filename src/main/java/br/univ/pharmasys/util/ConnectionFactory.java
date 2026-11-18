@@ -7,14 +7,15 @@ import java.sql.SQLException;
 
 public class ConnectionFactory {
 
-    private static final String DATABASE_NAME = "pharmasys";
-    private static final String URL = "jdbc:mysql://localhost:3306/" + DATABASE_NAME + "?useTimezone=true&serverTimezone=America/Recife";
-    private static final String USER = "root";
-    private static final String PASSWORD = "87818481"; // <--- Coloque a senha que você definiu no mysql
+    private static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/pharmasys?useTimezone=true&serverTimezone=America/Recife";
 
     public static Connection getConnection() {
+        String url = ConfigLoader.get("db.url", DEFAULT_URL);
+        String user = ConfigLoader.get("db.user", "root");
+        String password = ConfigLoader.get("db.password", "");
+
         try {
-            return DriverManager.getConnection(URL, USER, PASSWORD);
+            return DriverManager.getConnection(url, user, password);
 
         } catch (SQLException e) {
             System.err.println("FALHA AO CONECTAR AO BANCO DE DADOS!");

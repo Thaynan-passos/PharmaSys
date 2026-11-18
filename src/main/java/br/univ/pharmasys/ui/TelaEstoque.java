@@ -27,7 +27,7 @@ public class TelaEstoque extends JFrame {
         setSize(800, 450);
         setLocationRelativeTo(null);
 
-        jLabelTitulo.setFont(new Font("Arial", Font.BOLD, 20));
+        jLabelTitulo.setFont(new Font("Segoe UI", Font.BOLD, 20));
 
         tabelaEstoque.setModel(new DefaultTableModel(
                 new Object[][]{},

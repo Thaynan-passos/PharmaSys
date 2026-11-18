@@ -13,7 +13,7 @@ public class TelaEstoquista extends JFrame {
 
     private JPanel panelTopo;
     private JPanel panelFundo;
-    private static final Font FONTE_BOTAO_PRINCIPAL = new Font("SF Pro", Font.BOLD | Font.ITALIC, 14);
+    private static final Font FONTE_BOTAO_PRINCIPAL = new Font("Segoe UI", Font.BOLD | Font.ITALIC, 14);
     private static final int LARGURA_BOTAO = 200;
     private static final int ALTURA_BOTAO = 100;
 
@@ -70,13 +70,13 @@ public class TelaEstoquista extends JFrame {
             labelLogo.setText("PharmaSys");
         }
 
-        labelBemvindo.setFont(new Font("SF Pro", Font.BOLD, 18));
-        labelBuscar.setFont(new Font("SF Pro", Font.ITALIC, 14));
+        labelBemvindo.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        labelBuscar.setFont(new Font("Segoe UI", Font.ITALIC, 14));
         labelBuscar.setForeground(new Color(102, 102, 102));    
-        textFieldBusca.setFont(new Font("SF Pro", Font.ITALIC, 14));
+        textFieldBusca.setFont(new Font("Segoe UI", Font.ITALIC, 14));
         textFieldBusca.setForeground(Color.BLACK); 
         
-        jLabelSair.setFont(new Font("SF Pro", Font.PLAIN, 14));
+        jLabelSair.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         jLabelSair.setForeground(Color.RED);
         jLabelSair.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         jLabelSair.setText("Sair");
@@ -157,9 +157,9 @@ public class TelaEstoquista extends JFrame {
                 .addComponent(panelFundo, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        labelNome.setFont(new Font("SF Pro", Font.PLAIN, 14));
-        relogio.setFont(new Font("SF Pro", Font.PLAIN, 14));
-        textFieldBusca.setFont(new Font("SF Pro", Font.ITALIC, 14));
+        labelNome.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        relogio.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        textFieldBusca.setFont(new Font("Segoe UI", Font.ITALIC, 14));
         textFieldBusca.setForeground(Color.GRAY);
         labelLupa.setText("🔍");
 

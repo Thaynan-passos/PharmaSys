@@ -20,34 +20,34 @@ public class MedicamentoInjetavelDAO extends MedicamentoDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, sku);
-            ResultSet rs = stmt.executeQuery();
 
-            if (rs.next()) {
-                //instancia o objeto
-                MedicamentoInjetavel inj = new MedicamentoInjetavel();
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    //instancia o objeto
+                    MedicamentoInjetavel inj = new MedicamentoInjetavel();
 
-                inj.setSku(rs.getString("SKU"));
-                inj.setNomeComercial(rs.getString("NOME_COMERCIAL"));
-                inj.setDosagem(rs.getString("DOSAGEM"));
-                inj.setFormaFarmaceutica(rs.getString("FORMA_FARMACEUTICA"));
-                inj.setFabricante(rs.getString("FABRICANTE"));
-                inj.setCodigoBarras(rs.getString("CODIGO_BARRAS"));
-                inj.setLaboratorio(rs.getString("LABORATORIO"));
-                inj.setEstoqueMax(rs.getInt("ESTOQUE_MAX"));
-                inj.setEstoqueMin(rs.getInt("ESTOQUE_MIN"));
-                inj.setEstoqueAtual(rs.getInt("ESTOQUE_ATUAL"));
-                inj.setPreco(rs.getBigDecimal("PRECO"));
+                    inj.setSku(rs.getString("SKU"));
+                    inj.setNomeComercial(rs.getString("NOME_COMERCIAL"));
+                    inj.setDosagem(rs.getString("DOSAGEM"));
+                    inj.setFormaFarmaceutica(rs.getString("FORMA_FARMACEUTICA"));
+                    inj.setFabricante(rs.getString("FABRICANTE"));
+                    inj.setCodigoBarras(rs.getString("CODIGO_BARRAS"));
+                    inj.setLaboratorio(rs.getString("LABORATORIO"));
+                    inj.setEstoqueMax(rs.getInt("ESTOQUE_MAX"));
+                    inj.setEstoqueMin(rs.getInt("ESTOQUE_MIN"));
+                    inj.setEstoqueAtual(rs.getInt("ESTOQUE_ATUAL"));
+                    inj.setPreco(rs.getBigDecimal("PRECO"));
 
+                    if (rs.getDate("DATA_EXPIRACAO") != null) {
+                        inj.setDataExpiracao(rs.getDate("DATA_EXPIRACAO").toLocalDate());
+                    }
 
-                if (rs.getDate("DATA_EXPIRACAO") != null) {
-                    inj.setDataExpiracao(rs.getDate("DATA_EXPIRACAO").toLocalDate());
+                    inj.setViaAdministracao(rs.getString("VIA_ADMINISTRACAO"));
+                    inj.setTemperaturaMinima(rs.getDouble("TEMPERATURA_MINIMA"));
+                    inj.setTemperaturaMaxima(rs.getDouble("TEMPERATURA_MAXIMA"));
+
+                    return inj;
                 }
-
-                inj.setViaAdministracao(rs.getString("VIA_ADMINISTRACAO"));
-                inj.setTemperaturaMinima(rs.getDouble("TEMPERATURA_MINIMA"));
-                inj.setTemperaturaMaxima(rs.getDouble("TEMPERATURA_MAXIMA"));
-
-                return inj;
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar medicamento injetável: " + e.getMessage(), e);

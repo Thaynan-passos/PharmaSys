@@ -29,7 +29,7 @@ public class TelaResultados extends javax.swing.JFrame {
         tabelaResultado = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         tabelaResultado.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -44,7 +44,7 @@ public class TelaResultados extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tabelaResultado);
 
-        jLabel1.setFont(new java.awt.Font("SF Pro", 0, 16)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel1.setText("Você procura por:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

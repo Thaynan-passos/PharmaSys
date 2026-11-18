@@ -84,13 +84,13 @@ public class MedicamentoDAO {
 
     public List<Medicamento> buscarPorNome(String nome) {
 
-        String sql = "SELECT * FROM MEDICAMENTO WHERE NOME_COMERCIAL = ?";
+        String sql = "SELECT * FROM MEDICAMENTO WHERE LOWER(NOME_COMERCIAL) LIKE LOWER(?) ORDER BY NOME_COMERCIAL";
         List<Medicamento> lista = new ArrayList<>();
 
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, nome);
+            stmt.setString(1, "%" + nome + "%");
 
             try (ResultSet rs = stmt.executeQuery()) {
 
@@ -173,7 +173,7 @@ public class MedicamentoDAO {
 
         String sql = "UPDATE MEDICAMENTO SET NOME_COMERCIAL=?, DOSAGEM=?, FORMA_FARMACEUTICA=?, FABRICANTE=?, "
                 + "CODIGO_BARRAS=?, LABORATORIO=?, ESTOQUE_MAX=?, ESTOQUE_MIN=?, ESTOQUE_ATUAL=?, DATA_EXPIRACAO=?, "
-                + "PRECO=?, WHERE SKU=?";
+                + "PRECO=? WHERE SKU=?";
 
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
